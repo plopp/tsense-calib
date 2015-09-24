@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from Tkinter import *
+from PIL import ImageTk, Image
 import time
 from pymodbus.client.sync import ModbusTcpClient as ModbusClient
-modbus = ModbusClient('192.168.1.9')
+modbus = ModbusClient('192.168.0.99')
 import matplotlib
 #matplotlib.use('QT4Agg')
 import numpy as np
@@ -10,14 +11,19 @@ import matplotlib.pyplot as plt
 from PyQt4 import QtCore,QtGui
 
 
-tsense_arr = [10,11,12,13,14,15,16,17,18,19]
+#tsense_arr = [10,11,12,13,14,15,16,17,18,19]
+tsense_arr = [11]
 variable_arr = []
 
 root = Tk()
 root.wm_title("Kalibrering tSense SenseAir")
-root.minsize(width=(int(len(tsense_arr)/(len(tsense_arr)/4))-1)*200, height=666)
-root.maxsize(width=666, height=666)
-Label(root, text="Adressen står på en dymolapp i underkant på varje givare.", justify="left", anchor="w").place(x=10,y=10)
+#root.minsize(width=(int(len(tsense_arr)/(len(tsense_arr)/4))-1)*200, height=740)
+root.maxsize(width=666, height=740)
+Label(root, text="Adressen står på en dymolapp i underkant på varje givare:", justify="left", anchor="w").place(x=10,y=380)
+
+img = ImageTk.PhotoImage(Image.open('/home/kallekalibrering/git/tsense-calib/IMG_5747.JPG'))
+panel = Label(root, image = img)
+panel.place(x=10,y=400)
 
 for addr in tsense_arr:
 	variable_arr.append([StringVar(),StringVar(),StringVar()])
@@ -93,7 +99,7 @@ def close(_in):
 
 for idx,addr in enumerate(tsense_arr):
 	group = LabelFrame(root, text=''.join(["Addr ",str(addr)]), padx=5, pady=5)
-	group.place(x=(idx%4)*195+10,y=(idx/4)*110+40,width=195,height=110)
+	group.place(x=(idx%4)*195+10,y=(idx/4)*110+10,width=195,height=110)
 
 	Label(group, text="CO2:", justify="left", anchor="w").grid(row=1,column=1, sticky='w')
 	Label(group, textvariable=variable_arr[idx][0], justify="right", anchor="e", width=10).grid(row=1,column=2, sticky='e')
